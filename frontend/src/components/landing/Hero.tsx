@@ -1,21 +1,28 @@
-import { ArrowRight, FolderOpen, Link2 } from 'lucide-react'
+import { FolderOpen } from 'lucide-react'
 import { Button } from '../ui/button'
-import { Input } from '../ui/input'
 import { Badge } from '../ui/badge'
+import { BranchVisualization } from './BranchVisualization'
+import { RepoInput } from './RepoInput'
 
 const Hero = () => {
   return (
     <section
-      id="explore"
       className="
-        relative
-        min-h-[calc(100vh-100px)]
-        overflow-hidden
-        px-5
-        py-10
-        md:px-10
-        lg:px-16
-      "
+    relative
+    min-h-[calc(100vh-100px)]
+    overflow-hidden
+
+    bg-[#f7f7f5]
+    text-black
+
+    dark:bg-[#0b0f14]
+    dark:text-white
+
+    bg-[linear-gradient(#dfe3e8_1px,transparent_1px),linear-gradient(90deg,#dfe3e8_1px,transparent_1px)]
+    bg-[size:24px_24px]
+
+    dark:bg-[linear-gradient(#1a2430_1px,transparent_1px),linear-gradient(90deg,#1a2430_1px,transparent_1px)]
+  "
     >
       {/* Dark diagonal background */}
       <div
@@ -169,65 +176,8 @@ const Hero = () => {
           </p>
 
           {/* Repository form */}
-          <div
-            className="
-              mt-8
-              flex
-              max-w-[680px]
-              flex-col
-              overflow-hidden
-              rounded-2xl
-              border-[3px]
-              border-black
-              bg-white
-              p-1
-              shadow-[6px_6px_0px_#09090b]
-              sm:flex-row
-            "
-          >
-            <div className="relative flex min-w-0 flex-1 items-center">
-              <Link2
-                className="
-                  absolute
-                  left-4
-                  size-5
-                  text-blue-600
-                "
-              />
+          <RepoInput />
 
-              <Input
-                placeholder="Paste a GitHub repository URL..."
-                className="
-                  h-14
-                  border-0
-                  bg-transparent
-                  pl-12
-                  text-base
-                  shadow-none
-                  focus-visible:ring-0
-                "
-              />
-            </div>
-
-            <Button
-              className="
-                h-14
-                rounded-xl
-                border-2
-                border-black
-                bg-gradient-to-r
-                from-blue-500
-                to-violet-600
-                px-8
-                text-base
-                font-bold
-                text-white
-              "
-            >
-              Visualize
-              <ArrowRight className="ml-2 size-5" />
-            </Button>
-          </div>
 
           {/* OR */}
           <div className="my-5 flex max-w-[680px] items-center gap-4">
@@ -265,6 +215,7 @@ const Hero = () => {
         {/* RIGHT */}
         <div className="relative min-h-[550px]">
           {/* We add BranchVisualization here */}
+          <BranchVisualization />
         </div>
       </div>
     </section>

@@ -43,6 +43,7 @@ export function FeatureHighlights() {
     <section
       id="features"
       className="
+        mt-3
         relative
         z-30
         mx-auto

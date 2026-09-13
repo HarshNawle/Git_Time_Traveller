@@ -2,6 +2,7 @@ import { GitBranch, Sun, } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 // import { Separator } from "@/components/ui/separator";
 
 
@@ -97,21 +98,7 @@ const Header = () => {
 
         {/* Right controls */}
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            className="
-              hidden
-              size-12
-              rounded-xl
-              border-2
-              border-black
-              bg-white
-              lg:flex
-            "
-          >
-            <Sun className="size-5" />
-          </Button>
+          <ThemeToggle/>
 
           <Button
             className="

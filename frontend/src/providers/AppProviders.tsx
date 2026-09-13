@@ -1,4 +1,6 @@
+import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "./QueryProvider";
+
 
 export function AppProviders({
   children,
@@ -8,6 +10,9 @@ export function AppProviders({
   return (
     <QueryProvider>
       {children}
+      <Toaster
+        position="bottom-right"
+      />
     </QueryProvider>
   );
 }
