@@ -1,225 +1,249 @@
-import { FolderOpen } from 'lucide-react'
-import { Button } from '../ui/button'
-import { Badge } from '../ui/badge'
-import { BranchVisualization } from './BranchVisualization'
-import { RepoInput } from './RepoInput'
+import { BranchVisualization } from "./BranchVisualization";
+import { LocalRepoButton } from "./LocalRepoButton";
+import { RepoInput } from "./RepoInput";
+import { Header } from "@/components/layout/Header";
 
-const Hero = () => {
+export function Hero() {
   return (
     <section
+      id="explore"
       className="
-    relative
-    min-h-[calc(100vh-100px)]
-    overflow-hidden
+        relative
+        min-h-[720px]
+        overflow-hidden
+        border-b-2
+        border-black
+        pb-16
 
-    bg-[#f7f7f5]
-    text-black
-
-    dark:bg-[#0b0f14]
-    dark:text-white
-
-    bg-[linear-gradient(#dfe3e8_1px,transparent_1px),linear-gradient(90deg,#dfe3e8_1px,transparent_1px)]
-    bg-[size:24px_24px]
-
-    dark:bg-[linear-gradient(#1a2430_1px,transparent_1px),linear-gradient(90deg,#1a2430_1px,transparent_1px)]
-  "
+        dark:border-white
+      "
     >
-      {/* Dark diagonal background */}
+      {/* Grid */}
+
+      <div
+        className="
+          grid-background
+          pointer-events-none
+          absolute
+          inset-0
+          opacity-50
+        "
+      />
+
+      {/* Dark diagonal */}
+
       <div
         className="
           pointer-events-none
           absolute
           right-[-15%]
-          top-[-10%]
+          top-[-20%]
+          hidden
           h-[125%]
-          w-[55%]
-          bg-[#171c22]
-          [clip-path:polygon(30%_0,100%_0,100%_100%,0_100%)]
+          w-[58%]
+          bg-[#20252a]
+          [clip-path:polygon(30%_0%,100%_0%,100%_100%,0%_100%)]
+
+          dark:block
+          dark:bg-[#0c0c0c]
+
+          lg:block
         "
       />
+
+      {/* Navbar at top of section */}
+      <Header />
 
       <div
         className="
           relative
           z-10
           mx-auto
+          mt-6
           grid
-          max-w-[1580px]
+          max-w-[1540px]
           items-center
-          gap-8
-          lg:grid-cols-[0.95fr_1.05fr]
+          gap-6
+          px-5
+
+          lg:grid-cols-[47%_53%]
         "
       >
         {/* LEFT */}
-        <div className="relative z-20 pt-8 lg:pt-0">
 
+        <div className="max-w-[720px]">
           {/* Pills */}
+
           <div className="mb-7 flex flex-wrap gap-3">
+            <Pill
+              text="VISUALIZE"
+              color="bg-blue-500"
+            />
 
-            <Badge
-              variant="outline"
-              className="
-                rounded-full
-                border-2
-                border-black
-                bg-white
-                px-4
-                py-2
-                text-sm
-                font-semibold
-                shadow-[2px_2px_0px_#09090b]
-              "
-            >
-              <span className="mr-2 text-blue-500">●</span>
-              VISUALIZE
-            </Badge>
+            <Pill
+              text="EXPLORE"
+              color="bg-violet-500"
+            />
 
-            <Badge
-              variant="outline"
-              className="
-                rounded-full
-                border-2
-                border-black
-                bg-white
-                px-4
-                py-2
-                text-sm
-                font-semibold
-                shadow-[2px_2px_0px_#09090b]
-              "
-            >
-              <span className="mr-2 text-violet-500">●</span>
-              EXPLORE
-            </Badge>
-
-            <Badge
-              variant="outline"
-              className="
-                rounded-full
-                border-2
-                border-black
-                bg-white
-                px-4
-                py-2
-                text-sm
-                font-semibold
-                shadow-[2px_2px_0px_#09090b]
-              "
-            >
-              <span className="mr-2 text-green-500">●</span>
-              UNDERSTAND
-            </Badge>
-
+            <Pill
+              text="UNDERSTAND"
+              color="bg-green-500"
+            />
           </div>
 
           {/* Heading */}
-          <h1
+
+          <div
             className="
-              max-w-[700px]
-              text-[54px]
               font-black
-              leading-[0.92]
-              tracking-[-0.055em]
-              text-black
-              sm:text-6xl
-              md:text-7xl
-              xl:text-[88px]
+              tracking-[-0.065em]
+              leading-[0.88]
+              text-[clamp(4rem,7vw,6.5rem)]
             "
           >
-            Git History
+            <span className="block">
+              Git History
+            </span>
 
             <span
               className="
-                mt-1
                 block
                 bg-gradient-to-r
-                from-blue-600
-                via-violet-600
-                to-purple-700
+                from-green-400
+                via-violet-500
+                to-[#c9b6ff]
                 bg-clip-text
                 text-transparent
               "
             >
               Time Traveller
             </span>
-          </h1>
+          </div>
 
-          {/* Main statement */}
+          {/* Subtitle */}
+
           <h2
             className="
-              mt-7
-              max-w-[680px]
+              mt-8
               text-xl
-              font-bold
-              leading-8
-              text-slate-900
-              md:text-2xl
+              font-black
+
+              sm:text-2xl
             "
           >
             Turn commit history into a visual story.
           </h2>
 
-          {/* Description */}
           <p
             className="
-              mt-3
+              mt-4
               max-w-[650px]
               text-base
-              leading-7
+              leading-relaxed
               text-slate-600
-              md:text-lg
+
+              dark:text-slate-300
+
+              sm:text-lg
             "
           >
-            Explore how a project evolved, identify hotspots,
-            understand contributors, and uncover insights —
-            all in one interactive experience.
+            Explore how a project evolved, identify
+            hotspots, understand contributors, and
+            uncover insights — all in one interactive
+            experience.
           </p>
 
-          {/* Repository form */}
-          <RepoInput />
+          {/* Repository input */}
 
+          <div className="mt-8">
+            <RepoInput
+              onSubmit={(url) => {
+                console.log(
+                  "Repository submitted:",
+                  url
+                );
+              }}
+            />
 
-          {/* OR */}
-          <div className="my-5 flex max-w-[680px] items-center gap-4">
-            <div className="h-[2px] flex-1 bg-slate-300" />
+            {/* OR */}
 
-            <span className="font-medium text-slate-500">
-              or
-            </span>
+            <div
+              className="
+                my-4
+                flex
+                max-w-[670px]
+                items-center
+                gap-4
+              "
+            >
+              <div className="h-px flex-1 bg-slate-400" />
 
-            <div className="h-[2px] flex-1 bg-slate-300" />
+              <span className="text-sm font-bold">
+                or
+              </span>
+
+              <div className="h-px flex-1 bg-slate-400" />
+            </div>
+
+            <LocalRepoButton
+              onSelect={() => {
+                console.log(
+                  "Local repository selected"
+                );
+              }}
+            />
           </div>
-
-          {/* Local repo */}
-          <Button
-            variant="outline"
-            size="lg"
-            className="
-              h-13
-              rounded-xl
-              border-2
-              border-black
-              bg-white
-              px-6
-              font-semibold
-              text-blue-700
-              shadow-[4px_4px_0px_#09090b]
-              hover:bg-blue-50
-            "
-          >
-            <FolderOpen className="mr-3 size-5" />
-            Choose Local Repository
-          </Button>
         </div>
 
         {/* RIGHT */}
-        <div className="relative min-h-[550px]">
-          {/* We add BranchVisualization here */}
+
+        <div className="relative hidden lg:block">
           <BranchVisualization />
         </div>
       </div>
+
+      {/* Mobile visualization */}
+
+      <div className="relative z-10 mt-10 lg:hidden">
+        <BranchVisualization />
+      </div>
     </section>
-  )
+  );
 }
 
-export default Hero
+function Pill({
+  text,
+  color,
+}: {
+  text: string;
+  color: string;
+}) {
+  return (
+    <div
+      className="
+        flex
+        items-center
+        gap-2
+        rounded-full
+        border-2
+        border-black
+        bg-[#f8f5ea]
+        px-4
+        py-1.5
+        text-xs
+        font-bold
+        shadow-[2px_2px_0px_#050402]
+
+        dark:border-white
+        dark:bg-[#111111]
+        dark:shadow-[2px_2px_0px_#000]
+      "
+    >
+      <span
+        className={`size-2.5 rounded-full ${color}`}
+      />
+
+      {text}
+    </div>
+  );
+}

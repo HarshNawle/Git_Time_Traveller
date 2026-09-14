@@ -1,75 +1,44 @@
-import {
-    FolderOpen,
-  } from "lucide-react";
-  
-  import { Button } from "@/components/ui/button";
-  
-  export function LocalRepoButton() {
-    const supported =
-      "showDirectoryPicker" in window;
-  
-    const chooseRepository = async () => {
-      if (!supported) return;
-  
-      try {
-        const directory =
-          await window.showDirectoryPicker();
-  
-        const gitHandle =
-          await directory.getDirectoryHandle(
-            ".git"
-          );
-  
-        if (!gitHandle) {
-          throw new Error(
-            "Not a Git repository"
-          );
-        }
-  
-        console.log(
-          "Git repository:",
-          directory.name
-        );
-  
-        // Next step:
-        // start local WASM parsing
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    return (
-      <div>
-        <Button
-          type="button"
-          variant="outline"
-          size="lg"
-          disabled={!supported}
-          onClick={chooseRepository}
-          className="
-            h-13
-            rounded-xl
-            border-2
-            border-black
-            bg-white
-            px-6
-            font-semibold
-            text-blue-700
-            shadow-[4px_4px_0px_#09090b]
-          "
-        >
-          <FolderOpen className="mr-3 size-5" />
-  
-          Choose Local Repository
-        </Button>
-  
-        {!supported && (
-          <p className="mt-2 max-w-sm text-xs text-slate-500">
-            Local repo analysis requires Chrome
-            or Edge. You can still analyze any
-            public GitHub repo above.
-          </p>
-        )}
-      </div>
-    );
-  }
+import { FolderOpen } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+
+interface LocalRepoButtonProps {
+  onSelect?: () => void;
+}
+
+export function LocalRepoButton({
+  onSelect,
+}: LocalRepoButtonProps) {
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={onSelect}
+      className="
+        h-14
+        rounded-xl
+        border-[3px]
+        border-black
+        bg-[#c3deb1]
+        px-5
+        font-bold
+        text-black
+        shadow-[4px_4px_0px_#050402]
+        transition-transform
+        hover:translate-x-[1px]
+        hover:translate-y-[1px]
+        hover:bg-[#c3deb1]
+
+        dark:border-white
+        dark:bg-[#18231b]
+        dark:text-[#c3deb1]
+        dark:shadow-[4px_4px_0px_#000]
+        dark:hover:bg-[#18231b]
+      "
+    >
+      <FolderOpen className="mr-3 size-5" />
+
+      Choose Local Repository
+    </Button>
+  );
+}

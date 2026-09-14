@@ -1,132 +1,260 @@
-import { GitBranch, Sun, } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
+import {
+  GitBranch,
+  Menu,
+  Moon,
+  Sun,
+  X,
+} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
-// import { Separator } from "@/components/ui/separator";
+import { useUIStore } from "@/stores/ui-store";
 
+export function Header() {
+  const theme = useUIStore((state) => state.theme);
+  const toggleTheme = useUIStore(
+    (state) => state.toggleTheme
+  );
 
-const Header = () => {
+  const mobileMenuOpen = useUIStore(
+    (state) => state.mobileMenuOpen
+  );
+
+  const setMobileMenuOpen = useUIStore(
+    (state) => state.setMobileMenuOpen
+  );
+
   return (
-    <header className="relative z-50 px-4 pt-4 md:px-8">
-      <div
+    <header className="relative z-50 px-4 pt-4 sm:px-8">
+      <nav
         className="
           mx-auto
           flex
-          h-[76px]
-          max-w-[1580px]
+          h-[72px]
+          max-w-[1540px]
           items-center
           justify-between
           rounded-2xl
           border-[3px]
-          border-black
-          bg-white
-          px-5
-          shadow-[7px_7px_0px_#09090b]
-          md:px-7
+          border-[#050402]
+          bg-[#f8f5ea]
+          px-4
+          shadow-[7px_7px_0px_#050402]
+          transition-colors
+
+          dark:border-[#f8f5ea]
+          dark:bg-[#050402]
+          dark:shadow-[7px_7px_0px_#000]
+
+          sm:px-6
         "
       >
-        {/* Logo */}
-        <div className="flex items-center gap-4">
-          <div className="flex size-11 items-center justify-center">
-            <GitBranch
-              className="size-10 text-blue-600"
-              strokeWidth={2.2}
-            />
-          </div>
+        {/* Brand */}
 
-          <div className="flex items-center gap-3">
-            <span
-              className="
-                hidden
-                font-mono
-                text-lg
-                font-bold
-                tracking-tight
-                sm:block
-                md:text-xl
-              "
-            >
-              Git History Time Traveller
-            </span>
+        <a
+          href="/"
+          className="flex items-center gap-2 sm:gap-3"
+        >
+          <GitBranch
+            className="
+              size-8
+              text-blue-600
 
-            <Badge
-              variant="outline"
-              className="
-                border-2
-                border-slate-300
-                bg-white
-                font-mono
-                text-slate-600
-              "
-            >
-              v1.0
-            </Badge>
-          </div>
-        </div>
+              dark:text-[#c9b6ff]
+            "
+          />
 
-        {/* Navigation */}
-        <nav className="hidden items-center gap-9 lg:flex">
+          <span
+            className="
+              hidden
+              font-mono
+              text-lg
+              font-black
+              tracking-tight
+
+              sm:block
+              lg:text-xl
+            "
+          >
+            Git History Time Traveller
+          </span>
+
+          <span
+            className="
+              rounded-lg
+              border-2
+              border-black
+              px-2
+              py-1
+              font-mono
+              text-xs
+              font-bold
+
+              dark:border-slate-600
+            "
+          >
+            v1.0
+          </span>
+        </a>
+
+        {/* Desktop navigation */}
+
+        <div className="hidden items-center gap-8 md:flex">
           <a
             href="#explore"
-            className="text-sm font-medium hover:text-blue-600"
+            className="text-sm font-semibold transition-opacity hover:opacity-50"
           >
             Explore
           </a>
 
           <a
             href="#features"
-            className="text-sm font-medium hover:text-blue-600"
+            className="text-sm font-semibold transition-opacity hover:opacity-50"
           >
             Features
           </a>
 
           <a
             href="#about"
-            className="text-sm font-medium hover:text-blue-600"
+            className="text-sm font-semibold transition-opacity hover:opacity-50"
           >
             About
           </a>
 
           <a
-            href="#docs"
-            className="text-sm font-medium hover:text-blue-600"
+            href="#how-it-works"
+            className="text-sm font-semibold transition-opacity hover:opacity-50"
           >
             Docs
           </a>
-        </nav>
+        </div>
 
-        {/* Right controls */}
-        <div className="flex items-center gap-3">
-          <ThemeToggle/>
+        {/* Actions */}
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={toggleTheme}
+            className="
+              size-11
+              rounded-xl
+              border-[3px]
+              border-black
+              bg-[#f8f5ea]
+              shadow-[3px_3px_0px_#050402]
+              cursor-pointer
+              dark:border-white
+              dark:bg-[#111111]
+              dark:text-white
+              dark:shadow-[3px_3px_0px_#000]
+            "
+          >
+            {theme === "light" ? (
+              <Sun className="size-5" />
+            ) : (
+              <Moon className="size-5" />
+            )}
+          </Button>
 
           <Button
             className="
-              h-12
-              gap-2
+              hidden
+              h-11
               rounded-xl
-              border-2
+              border-[3px]
               border-black
-              bg-gradient-to-r
-              from-blue-500
-              to-violet-600
               px-5
-              text-white
-              shadow-[4px_4px_0px_#09090b]
-              hover:translate-x-[1px]
-              hover:translate-y-[1px]
-              hover:shadow-[3px_3px_0px_#09090b]
+              font-bold
+              text-black
+              shadow-[3px_3px_0px_#050402]
+              hover:opacity-90
+              cursor-pointer
+              sm:flex
             "
           >
-            {/* <Github className="size-5" /> */}
-            <span className="hidden sm:inline">
-              Sign in with GitHub
-            </span>
+            <img height="32" width="32" src="https://unpkg.com/simple-icons@v16/icons/GitHub.svg" />
+            {/* <Github className="mr-2 size-5" /> */}
+            Sign in with GitHub
+          </Button>
+
+          {/* Mobile */}
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              setMobileMenuOpen(!mobileMenuOpen)
+            }
+            className="
+              size-11
+              rounded-xl
+              border-[3px]
+              border-black
+              md:hidden
+
+              dark:border-white
+            "
+          >
+            {mobileMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
           </Button>
         </div>
-      </div>
+      </nav>
+
+      {/* Mobile navigation */}
+
+      {mobileMenuOpen && (
+        <div
+          className="
+            mx-4
+            mt-3
+            rounded-2xl
+            border-[3px]
+            border-black
+            bg-[#f8f5ea]
+            p-4
+            shadow-[5px_5px_0px_#050402]
+
+            dark:border-white
+            dark:bg-[#111111]
+            dark:shadow-[5px_5px_0px_#000]
+
+            md:hidden
+          "
+        >
+          <div className="flex flex-col gap-3">
+            {[
+              ["Explore", "#explore"],
+              ["Features", "#features"],
+              ["About", "#about"],
+              ["Docs", "#how-it-works"],
+            ].map(([label, href]) => (
+              <a
+                key={label}
+                href={href}
+                onClick={() =>
+                  setMobileMenuOpen(false)
+                }
+                className="
+                  rounded-xl
+                  border-2
+                  border-black
+                  px-4
+                  py-3
+                  font-bold
+
+                  dark:border-white
+                "
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
-
-export default Header
