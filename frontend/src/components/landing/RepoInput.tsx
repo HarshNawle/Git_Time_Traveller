@@ -29,7 +29,7 @@ export function RepoInput({
       onSubmit={handleSubmit}
       className="
         flex
-        h-[68px]
+        h-17
         w-full
         max-w-[670px]
         overflow-hidden
@@ -87,7 +87,7 @@ export function RepoInput({
           rounded-xl
           bg-gradient-to-r
           from-green-500
-          to-violet-600
+          to-purple-400
           px-4
           font-bold
           text-white

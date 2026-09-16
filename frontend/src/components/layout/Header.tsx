@@ -7,11 +7,12 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useThemeStore } from "@/stores/theme.store";
 import { useUIStore } from "@/stores/ui-store";
 
 export function Header() {
-  const theme = useUIStore((state) => state.theme);
-  const toggleTheme = useUIStore(
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore(
     (state) => state.toggleTheme
   );
 
@@ -57,9 +58,9 @@ export function Header() {
           <GitBranch
             className="
               size-8
-              text-blue-600
+              text-green-600
 
-              dark:text-[#c9b6ff]
+              dark:text-purple-400
             "
           />
 
@@ -170,9 +171,13 @@ export function Header() {
               hover:opacity-90
               cursor-pointer
               sm:flex
+              dark:text-white
+              dark:border-[#f8f5ea]
+            dark:bg-[#050402]
+              dark:shadow-[7px_7px_0px_#000]
             "
           >
-            <img height="32" width="32" src="https://unpkg.com/simple-icons@v16/icons/GitHub.svg" />
+            <img height="32" width="32" className="dark:bg-white rounded-2xl" src="https://unpkg.com/simple-icons@v16/icons/GitHub.svg" />
             {/* <Github className="mr-2 size-5" /> */}
             Sign in with GitHub
           </Button>

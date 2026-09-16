@@ -32,7 +32,7 @@ import {
         },
   
         {
-          path: "/repo/:jobId/timeline",
+          path: "/workspace/:repositoryId/timeline",
           element: <TimelinePage />,
         },
   
@@ -56,10 +56,6 @@ import {
           element: <SettingsPage />,
         },
   
-        {
-          path: "*",
-          element: <LandingPage />,
-        },
       ],
     },
   ]);

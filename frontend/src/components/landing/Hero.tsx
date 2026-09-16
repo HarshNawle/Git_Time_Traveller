@@ -110,7 +110,7 @@ export function Hero() {
                 block
                 bg-gradient-to-r
                 from-green-400
-                via-violet-500
+                via-purple-400
                 to-[#c9b6ff]
                 bg-clip-text
                 text-transparent
