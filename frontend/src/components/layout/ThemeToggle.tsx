@@ -14,7 +14,7 @@ export function ThemeToggle() {
       aria-label="Toggle theme"
       className="
         h-12
-        w-16
+        w-12
         rounded-xl
         border-[2px]
         border-black
@@ -22,7 +22,7 @@ export function ThemeToggle() {
         shadow-[3px_3px_0px_#09090b]
 
         dark:border-white
-        dark:bg-[#151a21]
+        dark:bg-black
         dark:text-white
         dark:shadow-[3px_3px_0px_#000]
       "

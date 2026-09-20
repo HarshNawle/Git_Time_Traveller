@@ -20,9 +20,9 @@ export function WorkspaceTopBar() {
   return (
     <header
       className="
-        rounded-2xl
-        sticky top-1 z-50
-        h-[72px]
+      sticky top-1 z-50
+      h-[72px]
+      rounded-2xl
         border
         border-[#050402]/12
         bg-[#F8F5EA]/90
