@@ -1,4 +1,6 @@
 import { GraphQLContext } from "../context.js";
+import { repositories, analysisJobs } from "../../db/schema/index.js";
+import { eq } from "drizzle-orm";
 
 export const resolvers = {
   Query: {
@@ -11,9 +13,12 @@ export const resolvers = {
       { jobId }: { jobId: string },
       context: GraphQLContext
     ) => {
-      return context.services.analysisService.getJob(
-        jobId
-      );
+      const result = await context.db
+        .select()
+        .from(analysisJobs)
+        .where(eq(analysisJobs.id, jobId))
+        .limit(1);
+      return result[0] || null;
     },
 
     repoInsights: async (
@@ -21,8 +26,12 @@ export const resolvers = {
       { repoId }: { repoId: string },
       context: GraphQLContext
     ) => {
-      return context.services.insightService
-        .getRepositoryInsights(repoId);
+      const result = await context.db
+        .select()
+        .from(repositories)
+        .where(eq(repositories.id, repoId))
+        .limit(1);
+      return result[0] || null;
     },
   },
 
@@ -32,8 +41,15 @@ export const resolvers = {
       { url }: { url: string },
       context: GraphQLContext
     ) => {
-      return context.services.repositoryService
-        .submitGitHubRepository({ url });
+      const result = await context.db
+        .insert(repositories)
+        .values({
+          sourceType: "github",
+          url,
+          name: url.split("/").pop() || "unknown",
+        })
+        .returning();
+      return result[0];
     },
 
     cancelAnalysisJob: async (
@@ -41,9 +57,10 @@ export const resolvers = {
       { jobId }: { jobId: string },
       context: GraphQLContext
     ) => {
-      await context.services.analysisService
-        .cancelJob(jobId);
-
+      await context.db
+        .update(analysisJobs)
+        .set({ status: "cancelled", completedAt: new Date() })
+        .where(eq(analysisJobs.id, jobId));
       return true;
     },
   },

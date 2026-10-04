@@ -1,17 +1,17 @@
 import type { Request } from "express";
-import { ServiceContainer } from "../services/container.js";
+import { db } from "../db/client.js";
 
 export interface GraphQLContext {
   request: Request;
-  services: ServiceContainer
+  db: typeof db;
 }
 
 export const createGraphQLContext = (
   request: Request,
-  services: ServiceContainer
+  services: { db: typeof db }
 ): GraphQLContext => {
   return {
     request,
-    services
+    db: services.db
   };
 };

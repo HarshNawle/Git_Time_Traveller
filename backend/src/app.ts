@@ -7,6 +7,7 @@ import { expressMiddleware } from "@as-integrations/express5";
 import { typeDefs } from "./graphql/schema/index.js";
 import { resolvers } from "./graphql/resolvers/index.js";
 import { createGraphQLContext } from "./graphql/context.js";
+import { db } from "./db/client.js";
 
 export const createApp = async () => {
   const app = express();
@@ -44,7 +45,7 @@ export const createApp = async () => {
     express.json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
-        return createGraphQLContext(req);
+        return createGraphQLContext(req, { db });
       },
     })
   );
