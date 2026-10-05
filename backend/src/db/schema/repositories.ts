@@ -12,13 +12,15 @@ export const repositories = pgTable(
         sourceType: repositorySourceTypeEnum(
             "source_type"
         ).notNull(),
-        url: text("url"),
+        githubId: integer("github_id").notNull().unique(),
+        url: text("url").notNull(),
         owner: varchar("owner", {
             length: 255
         }),
         name: varchar("name", {
             length: 255,
         }).notNull(),
+        fullName: varchar("full_name", { length: 255 }).notNull(),
         defaultBranch: varchar(
             "default_branch",
             {
