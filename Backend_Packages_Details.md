@@ -31,3 +31,63 @@
 1. **eslint prettier =** 
 2. 
 
+
+src/
+└── schemas/
+    │
+    ├── common.schema.ts
+    │   ├── UUIDSchema*
+    │   ├── IDSchema*
+    │   ├── DateSchema*
+    │   ├── DateRangeSchema*
+    │   └── PageInputSchema*
+    │
+    ├── repo.schema.ts
+    │   ├── RepoUrlSchema*
+    │   ├── GitHubRepoUrlSchema*
+    │   ├── RepoNameSchema*
+    │   ├── RepoOwnerSchema*
+    │   ├── RepoMetadataSchema*
+    │   ├── SubmitRepoSchema*
+    │   ├── RepoIdSchema*
+    │   ├── BranchSchema*
+    │   ├── FilePathSchema*
+    │   ├── PathPatternSchema*
+    │   ├── AuthorFilterSchema
+    │   └── RepoFilterSchema
+    │
+    ├── analysis.schema.ts
+    │   ├── JobIdSchema
+    │   ├── JobStatusSchema
+    │   ├── JobStageSchema
+    │   ├── JobProgressSchema
+    │   ├── AnalysisJobSchema
+    │   ├── CancelAnalysisJobSchema
+    │   └── AnalysisProgressEventSchema
+    │
+    ├── visualization.schema.ts
+    │   ├── TimelineFilterSchema
+    │   ├── HeatmapFilterSchema
+    │   └── ContributorFilterSchema
+    │
+    ├── git.schema.ts
+    │   ├── CommitSchema
+    │   ├── FileChangeSchema
+    │   ├── CommitWithChangesSchema
+    │   ├── FileStatsSchema
+    │   └── HotspotScoreSchema
+    │
+    ├── local-repo.schema.ts
+    │   ├── LocalStatsSchema
+    │   ├── SubmitLocalRepoStatsSchema
+    │   └── RepositoryAnalysisSchema
+    │
+    ├── export.schema.ts
+    │   ├── ExportFormatSchema
+    │   └── StartExportSchema
+    │
+    └── insight.schema.ts
+        ├── FeedbackVoteSchema
+        ├── InsightFeedbackSchema
+        └── InsightSchema
+

@@ -12,3 +12,4 @@ export * from "./saved-repositories.js";
 export * from "./insights.js";
 export * from "./insight-feedback.js";
 export * from "./exports.js";
+export * from "./commits.js"

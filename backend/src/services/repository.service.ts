@@ -64,3 +64,5 @@ const createRepository = async (url:string) => {
     return repository
 
 }
+
+export default createRepository;
