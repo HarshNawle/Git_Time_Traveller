@@ -66,16 +66,16 @@ src/
     │   └── AnalysisProgressEventSchema*
     │
     ├── visualization.schema.ts
-    │   ├── TimelineFilterSchema
-    │   ├── HeatmapFilterSchema
-    │   └── ContributorFilterSchema
+    │   ├── TimelineFilterSchema*
+    │   ├── HeatmapFilterSchema*
+    │   └── ContributorFilterSchema*
     │
     ├── git.schema.ts
-    │   ├── CommitSchema
-    │   ├── FileChangeSchema
-    │   ├── CommitWithChangesSchema
-    │   ├── FileStatsSchema
-    │   └── HotspotScoreSchema
+    │   ├── CommitSchema*
+    │   ├── FileChangeSchema*
+    │   ├── CommitWithChangesSchema*
+    │   ├── FileStatsSchema*
+    │   └── HotspotScoreSchema*
     │
     ├── local-repo.schema.ts
     │   ├── LocalStatsSchema
