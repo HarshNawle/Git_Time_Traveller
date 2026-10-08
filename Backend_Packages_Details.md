@@ -53,17 +53,17 @@ src/
     │   ├── BranchSchema*
     │   ├── FilePathSchema*
     │   ├── PathPatternSchema*
-    │   ├── AuthorFilterSchema
-    │   └── RepoFilterSchema
+    │   ├── AuthorFilterSchema*
+    │   └── RepoFilterSchema*
     │
     ├── analysis.schema.ts
-    │   ├── JobIdSchema
-    │   ├── JobStatusSchema
-    │   ├── JobStageSchema
-    │   ├── JobProgressSchema
-    │   ├── AnalysisJobSchema
-    │   ├── CancelAnalysisJobSchema
-    │   └── AnalysisProgressEventSchema
+    │   ├── JobIdSchema*
+    │   ├── JobStatusSchema*
+    │   ├── JobStageSchema*
+    │   ├── JobProgressSchema*
+    │   ├── AnalysisJobSchema*
+    │   ├── CancelAnalysisJobSchema*
+    │   └── AnalysisProgressEventSchema*
     │
     ├── visualization.schema.ts
     │   ├── TimelineFilterSchema

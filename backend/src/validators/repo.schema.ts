@@ -95,3 +95,30 @@ export const PathPatternSchema = z
     .trim()
     .max(500)
     .optional();
+
+export const AuthorFilterSchema = z
+    .array(
+        z.string()
+            .trim()
+            .min(1)
+            .max(100)
+    ).max(100).default([]);
+
+export const RepoFilterSchema = z
+    .object({
+        dateFrom: z.coerce.date().optional(),
+        dateTo: z.coerce.date().optional(),
+        authors: AuthorFilterSchema.optional(),
+        pathPattern: PathPatternSchema,
+        branch: BranchSchema.optional(),
+    })
+    .refine(
+        (data) => {
+            if(!data.dateFrom || !data.dateTo) return true;
+            return data.dateFrom <= data.dateTo;
+        },
+        {
+            message: "dateFrom must be before dateTo",
+            path: ["dateTo"],
+        }
+    );
