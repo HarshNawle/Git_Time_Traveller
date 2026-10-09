@@ -78,16 +78,44 @@ src/
     │   └── HotspotScoreSchema*
     │
     ├── local-repo.schema.ts
-    │   ├── LocalStatsSchema
-    │   ├── SubmitLocalRepoStatsSchema
-    │   └── RepositoryAnalysisSchema
+    │   ├── LocalStatsSchema*
+    │   ├── SubmitLocalRepoStatsSchema*
+    │   └── RepositoryAnalysisSchema*
     │
     ├── export.schema.ts
-    │   ├── ExportFormatSchema
-    │   └── StartExportSchema
+    │   ├── ExportFormatSchema*
+    │   └── StartExportSchema*
     │
     └── insight.schema.ts
-        ├── FeedbackVoteSchema
-        ├── InsightFeedbackSchema
-        └── InsightSchema
+        ├── FeedbackVoteSchema*
+        ├── InsightFeedbackSchema*
+        └── InsightSchema*
 
+For example, your GraphQL resolver:
+
+import { SubmitRepoSchema } from "../schemas";
+
+export async function submitRepo(
+  _: unknown,
+  args: unknown
+) {
+  const validated = SubmitRepoSchema.parse(args);
+
+  return analysisService.submitRepo(
+    validated.url
+  );
+}
+
+Better for API code:
+
+const result = SubmitRepoSchema.safeParse(args);
+
+if (!result.success) {
+  throw new Error(
+    result.error.issues
+      .map((issue) => issue.message)
+      .join(", ")
+  );
+}
+
+const { url } = result.data;
