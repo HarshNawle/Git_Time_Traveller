@@ -5,6 +5,8 @@ import {
     text,
     timestamp,
     integer,
+    uniqueIndex,
+    index,
   } from "drizzle-orm/pg-core";
   
   import { repositories } from "./repositories.js";
@@ -18,11 +20,15 @@ import {
         onDelete: "cascade",
       }),
   
-    sha: varchar("sha", {
+    hash: varchar("hash", {
       length: 40,
     })
-      .notNull()
-      .unique(),
+      .notNull(),
+
+    shortHash: varchar("short_hash", {
+      length: 12,
+    })
+      .notNull(),
   
     message: text("message").notNull(),
   
@@ -31,7 +37,7 @@ import {
     }),
   
     authorEmail: varchar("author_email", {
-      length: 255,
+      length: 320,
     }),
   
     committedAt: timestamp("committed_at", {
@@ -51,4 +57,12 @@ import {
     })
       .defaultNow()
       .notNull(),
-  });
+  },
+    (table) => ({
+      repoHashUnique: uniqueIndex("repository_commit_hash_unique")
+        .on( table.repositoryId, table.hash),
+
+      repoTimeIdx: index("commits_repository_time_idx")
+        .on( table.repositoryId, table.committedAt )
+    }),
+  );

@@ -1,43 +1,32 @@
 import { integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
-export const repositorySourceTypeEnum = pgEnum(
-    "repositroy_source_type" , [
-        "github", "local"
-    ]
+export const rpositoryProviderEnum = pgEnum(
+    "repositroy_provider" , 
+    ["GITHUB"]
+);
+
+export const repositoryStatusEnum = pgEnum(
+    "repository_status", [
+        "PENDING",
+        "ANALYZING",
+        "COMPLETED",
+        "FAILED"
+    ],
 );
 
 export const repositories = pgTable(
     "repositories",{
         id: uuid("id").defaultRandom().primaryKey(),
-        sourceType: repositorySourceTypeEnum(
-            "source_type"
-        ).notNull(),
-        githubId: integer("github_id").notNull().unique(),
-        url: text("url").notNull(),
-        owner: varchar("owner", {
-            length: 255
-        }),
-        name: varchar("name", {
-            length: 255,
-        }).notNull(),
-        fullName: varchar("full_name", { length: 255 }).notNull(),
-        defaultBranch: varchar(
-            "default_branch",
-            {
-                length: 255
-            }
-        ),
-        commitCount: integer(
-            "commit_count"
-        ).default(0).notNull(),
-        fileCount: integer("file_count").default(0).notNull(),
-        createdAt: timestamp(
-            "created_at", {
-                withTimezone: true
-            }
-        ).defaultNow().notNull(),
-        updatedAt: timestamp("updated_at",{
-            withTimezone: true
-        }).defaultNow().notNull(),
+        provider: rpositoryProviderEnum("provider").default("GITHUB").notNull(),
+        owner: varchar("owner", { length: 100 }).notNull(),
+        name: varchar("name", { length: 100 }).notNull(),
+        fullName: varchar("full_name", { length: 200 }).notNull(),
+        url: varchar("url", { length: 500 }).notNull(),
+        defaultBranch: varchar("default_branch", { length: 255 }),
+        currentCommitHash: varchar("current_commit_hash", { length: 40 }),
+        status: repositoryStatusEnum("status").default("PENDING").notNull(),
+        description: text("description"),
+        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
     }
 );

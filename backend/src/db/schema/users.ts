@@ -1,25 +1,22 @@
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
+import { bigint, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core"
 
 export const user = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey(),
-    githubId: varchar("github_id", {
-        length: 255,
+    githubId: bigint("github_id", {
+        mode: "number"
     }).notNull().unique(),
     githubUsername: varchar("github_username", {
-        length: 255,
+        length: 100,
     }).notNull(),
-    githubAvatarUrl: text(
-        "github_avatar_url"
-    ),
-
-    createdAt: timestamp(
-        "created_at", {
-            withTimezone: true
-        }
-    ).defaultNow().notNull(),
-    updatedAt: timestamp(
-        "updated_at",{
-            withTimezone: true
-        }
-    ).defaultNow().notNull(), 
-});
+    displayName: varchar("display_name", {
+        length: 200
+    }),
+    email: varchar("email", { length: 320 }),
+    avatarUrl: varchar("avatar_url", { length: 500 }),
+    ceatedAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updateAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+},
+    (table) => ({
+        githubIdIdx: uniqueIndex("user_github_id_idx").on(table.githubId),
+    }),
+);

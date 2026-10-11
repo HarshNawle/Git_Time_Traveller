@@ -1,15 +1,12 @@
 export * from "./users.js";
-export * from "./users.js";
 export * from "./repositories.js";
-export * from "./analysis-jobs.js";
-export * from "./analysis-results.js";
-export * from "./saved-repositories.js";
-export * from "./insights.js";
-export * from "./insight-feedback.js";
-export * from "./exports.js";
-export * from "./analysis-results.js";
-export * from "./saved-repositories.js";
-export * from "./insights.js";
-export * from "./insight-feedback.js";
-export * from "./exports.js";
-export * from "./commits.js"
+export * from "./memberships.js";
+export * from "./sessions.js";
+
+export * from "./commits.js";
+export * from "./commit-parent.js";
+export * from "./file-changes.js";
+export * from "./git-references.js";
+
+export * from "./file-metrics.js";
+export * from "./contributor-metrics.js";
