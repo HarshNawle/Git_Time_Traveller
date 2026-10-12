@@ -3,6 +3,7 @@ import z from "zod";
 export const GitHUbOAuthCallbackSchema = z.object({
     code: z.string().trim().min(1, "OAuth code is required"),
     state: z.string().trim().min(1, "OAuth code is required").optional(),
+    error: z.string().optional()
 });
 
 export const LoginSchema = z.object({
@@ -56,5 +57,17 @@ export const UpdateProfileSchema = z.object({
       ).optional(),
     avatarUrl: z.string().url("Invalid avatar URL").optional(),
 });
+
+export type GitHubProfile = z.infer<
+  typeof GitHubProfileSchema
+>;
+
+export type GitHubTokenResponse = z.infer<
+  typeof GitHubTokenResponseSchema
+>;
+
+export type AuthUser = z.infer<
+  typeof AuthUserSchema
+>;
 
 

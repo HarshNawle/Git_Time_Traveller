@@ -4,10 +4,11 @@ import helmet from "helmet";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
 
-import { typeDefs } from "./graphql/schema/index.js";
-import { resolvers } from "./graphql/resolvers/index.js";
-import { createGraphQLContext } from "./graphql/context.js";
+// import { typeDefs } from "./graphql/schema/index.js";
+// import { resolvers } from "./graphql/resolvers/index.js";
+// import { createGraphQLContext } from "./graphql/context.js";
 import { db } from "./db/client.js";
+import { users } from "./db/index.js";
 
 export const createApp = async () => {
   const app = express();
@@ -32,23 +33,27 @@ export const createApp = async () => {
   });
 
   // Apollo Server
-  const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
+  // const apolloServer = new ApolloServer({
+  //   typeDefs,
+  //   resolvers,
+  // });
 
-  await apolloServer.start();
+  // await apolloServer.start();
 
   // GraphQL
-  app.use(
-    "/graphql",
-    express.json(),
-    expressMiddleware(apolloServer, {
-      context: async ({ req }) => {
-        return createGraphQLContext(req, { db });
-      },
-    })
-  );
+  // app.use(
+  //   "/graphql",
+  //   express.json(),
+  //   expressMiddleware(apolloServer, {
+  //     context: async ({ req }) => {
+  //       return createGraphQLContext(req, { db });
+  //     },
+  //   })
+  // );
+
+  const result = await db.select().from(users);
+  console.log(result);
+  
 
   return app;
 };

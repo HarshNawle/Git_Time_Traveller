@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1790936776013,
-      "tag": "0000_mixed_satana",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1791137034084,
-      "tag": "0001_lowly_iceman",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1791137870758,
-      "tag": "0002_lumpy_texas_twister",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1791309601296,
-      "tag": "0003_calm_the_anarchist",
+      "when": 1791707918124,
+      "tag": "0000_amusing_harpoon",
       "breakpoints": true
     }
   ]

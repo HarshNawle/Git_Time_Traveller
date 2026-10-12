@@ -1,6 +1,6 @@
 import { bigint, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core"
 
-export const user = pgTable("users", {
+export const users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey(),
     githubId: bigint("github_id", {
         mode: "number"
@@ -13,8 +13,8 @@ export const user = pgTable("users", {
     }),
     email: varchar("email", { length: 320 }),
     avatarUrl: varchar("avatar_url", { length: 500 }),
-    ceatedAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updateAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 },
     (table) => ({
         githubIdIdx: uniqueIndex("user_github_id_idx").on(table.githubId),
