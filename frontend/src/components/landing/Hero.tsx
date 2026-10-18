@@ -1,7 +1,6 @@
 import { BranchVisualization } from "./BranchVisualization";
 import { LocalRepoButton } from "./LocalRepoButton";
 import { RepoInput } from "./RepoInput";
-import { Header } from "@/components/layout/Header";
 
 export function Hero() {
   return (
@@ -50,9 +49,6 @@ export function Hero() {
           lg:block
         "
       />
-
-      {/* Navbar at top of section */}
-      <Header />
 
       <div
         className="

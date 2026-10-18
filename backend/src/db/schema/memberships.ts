@@ -6,7 +6,7 @@ import {
     uniqueIndex,
   } from "drizzle-orm/pg-core";
   import { repositories } from "./repositories.js";
-import { user } from "./users.js";
+import { users } from "./users.js";
   
   export const repositoryRoleEnum = pgEnum(
     "repository_role",
@@ -24,7 +24,7 @@ import { user } from "./users.js";
   
       userId: uuid("user_id")
         .notNull()
-        .references(() => user.id, {
+        .references(() => users.id, {
           onDelete: "cascade",
         }),
   

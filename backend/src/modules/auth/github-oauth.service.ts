@@ -7,6 +7,54 @@ import { createAccessToken, generateRandomToken, hashToken } from "../../utils/t
 import { sessions } from "../../db/schema/sessions.js";
 import { users } from "../../db/index.js";
 import { and, eq, isNull } from "drizzle-orm";
+import { AuthUserSchema } from "./auth.schema.js";
+
+
+const OAUTH_STATE_COOKIE = "oauth_state";
+const OAUTH_VERIFIER_COOKIE = "oauth_verifier";
+const REFRESH_COOKIE = "refreshToken";
+
+const REFRESH_TOKEN_TTL_MS = 30*24*60*60*1000;
+
+const isProduction = env.NODE_ENV === "production";
+
+
+const authCookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    // Use "none" for cross-port localhost, requires secure=true
+    // For local dev with HTTP, we need to use "lax" but ensure cookie is sent
+    sameSite: isProduction ? ("none" as const) : ("lax" as const),
+    // Use root path so cookie is sent with all requests to backend
+    path: "/",
+    // Don't set domain for localhost - let browser handle it
+    // domain: isProduction ? undefined : "localhost",
+  };
+
+  const clearOAuthCookie = (res: Response) => {
+    res.clearCookie(OAUTH_STATE_COOKIE, authCookieOptions);
+    res.clearCookie(OAUTH_VERIFIER_COOKIE, authCookieOptions);
+};
+
+const setRefershCookie = (
+    res: Response,
+    token: string
+) => {
+    res.cookie(REFRESH_COOKIE, token, {
+      ...authCookieOptions,
+      maxAge: REFRESH_TOKEN_TTL_MS,
+    });
+  }
+  
+  const redirectToLoginWithError = (res : Response) => {
+    res.redirect(
+      `${env.FRONTEND_URL}/login?error=github_oauth_failed`
+    );
+  }                          
+
+const createPkceChallenge = (verifier: string) => 
+    createHash("sha256").update(verifier, "ascii").digest("base64url");
+
 
 export const URLSearchCodeForToken = async (
     code: string,
@@ -69,48 +117,7 @@ export const getGitHubProfile = async (
 
     const rawProfile: unknown = await response.json();
     return GitHubProfileSchema.parse(rawProfile);
-}
-
-const OAUTH_STATE_COOKIE = "oauth_state";
-const OAUTH_VERIFIER_COOKIE = "oauth_verifier";
-const REFRESH_COOKIE = "refreshToken";
-
-const REFRESH_TOKEN_TTL_MS = 30*24*60*60*1000;
-
-const isProduction = env.NODE_ENV === "production";
-
-
-const authCookieOptions = {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax" as const,
-    path: "/api/auth"
 };
-
-const clearOAuthCookie = (res: Response) => {
-    res.clearCookie(OAUTH_STATE_COOKIE, authCookieOptions);
-    res.clearCookie(OAUTH_VERIFIER_COOKIE, authCookieOptions);
-};
-
-const setRefershCookie = (
-    res: Response,
-    token: string
-) => {
-    res.cookie(REFRESH_COOKIE, token, {
-        ...authCookieOptions,
-        maxAge: REFRESH_TOKEN_TTL_MS,
-    });
-}
-
-const redirectToLoginWithError = (res : Response) => {
-    res.redirect(
-        `${env.FRONTEND_URL}/login?error=github_oauth_faild`
-    );
-}                          
-
-const createPkceChallenge = (verifier: string) => 
-    createHash("sha256").update(verifier).digest("base64url");
-
 
 export const githubOAuth = (
     _req: Request,
@@ -122,9 +129,19 @@ export const githubOAuth = (
 
     const codeChallenge = createPkceChallenge(codeVerifier);
 
+    console.log("Verifier length: ", codeVerifier.length);
+    console.log("Challenge length: ", codeChallenge.length);
+    
+ 
+
     res.cookie(OAUTH_STATE_COOKIE, state, {
         ...authCookieOptions,
         maxAge: 10*60*1000,
+    });
+
+    res.cookie(OAUTH_VERIFIER_COOKIE, codeVerifier, {
+      ...authCookieOptions,
+      maxAge: 10 * 60 * 1000,
     });
 
     const authorizationUrl = new URL(
@@ -146,12 +163,19 @@ export const githubOAuth = (
         env.GITHUB_OAUTH_SCOPES
     );
 
+    authorizationUrl.searchParams.set("state", state);
+
     authorizationUrl.searchParams.set(
         "code_challenge",
         codeChallenge
     );
 
-    res.redirect(authorizationUrl.toString());
+    authorizationUrl.searchParams.set(
+      "code_challenge_method",
+      "S256"
+    );
+
+    return res.redirect(authorizationUrl.toString());
 };
 
 export const githubCallBack = async (
@@ -246,7 +270,7 @@ export const githubCallBack = async (
 
         // Do not put access tokens in redirect query parameters.
         return res.redirect(
-            `${env.FRONTEND_URL}/auth/callback?login=success`
+            `${env.FRONTEND_URL}/auth/github/callback?login=success`
         );
 
     } catch (error) {
@@ -368,7 +392,7 @@ export const GithubRefreshToken = async (
         message: "Could not refresh session",
       });
     }
-};
+  };
   
     /**
     * 4. Log out and revoke the current session.
@@ -410,9 +434,43 @@ export const GithubLogout =  async (
         message: "Could not complete logout",
       });
     }
+  };
+
+
+/**
+ * 5. Get current user profile (requires valid access token)
+ */
+export const GithubMe = async (
+  req: Request,
+  res: Response
+) => {
+  const userId = req.auth?.userId;
+
+  if (!userId) {
+    return res.status(401).json({
+      message: "Authentication required",
+    });
+  }
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  const authUser = AuthUserSchema.parse({
+    id: user.id,
+    githubUsername: user.githubUsername,
+    displayName: user.displayName ?? user.githubUsername,
+    email: user.email,
+    avatarUrl: user.avatarUrl ?? `https://github.com/${user.githubUsername}.png`,
+  });
+
+  return res.status(200).json(authUser);
 };
-
-
-
-
-

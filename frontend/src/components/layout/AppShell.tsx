@@ -1,18 +1,13 @@
 import { Outlet, useLocation } from "react-router-dom";
-// import { Header } from "./Header";
+import { Header } from "./Header";
 import AnalysisHeader from "@/components/analysis/AnalysisHeader";
-// import { WorkspaceTopBar } from "../workspace/WorkspaceTopBar";
 
 const AppShell = () => {
   const location = useLocation();
 
   const pathname = location.pathname;
 
-  // const isLandingPage = pathname === "/";
-
   const isAnalysisPage = pathname.startsWith("/analyze/");
-
-  // const isWorkspacePage = pathname.startsWith("/workspace/");
 
   return (
     <div
@@ -26,14 +21,11 @@ const AppShell = () => {
         dark:text-[#f8f5ea]
       "
     >
-      {/* Landing Navbar */}
-      {/* {isLandingPage && <Header />} */}
+      {/* Global Header with GitHub auth */}
+      {!isAnalysisPage && <Header />}
 
       {/* Analysis Navbar */}
       {isAnalysisPage && <AnalysisHeader />}
-
-      {/* Workspace Navbar */}
-      {/* {isWorkspacePage && <WorkspaceTopBar />} */}
 
       <main>
         <Outlet />

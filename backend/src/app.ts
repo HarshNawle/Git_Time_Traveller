@@ -9,6 +9,10 @@ import { expressMiddleware } from "@as-integrations/express5";
 // import { createGraphQLContext } from "./graphql/context.js";
 import { db } from "./db/client.js";
 import { users } from "./db/index.js";
+import { env } from "./config/env.js";
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import authRouter from "./modules/auth/auth.routes.js";
 
 export const createApp = async () => {
   const app = express();
@@ -19,16 +23,27 @@ export const createApp = async () => {
   // CORS
   app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: env.FRONTEND_URL,
       credentials: true,
     })
   );
+
+  app.use(express.json());
+  app.use(cookieParser());
+
+  const authLimiter = rateLimit({
+    windowMs: 15*60*1000,
+    limit: 100,
+    standardHeaders: "draft-8",
+    legacyHeaders: false
+  });
+
+  app.use("/api/auth", authLimiter, authRouter)
 
   // Health check
   app.get("/health", (_req, res) => {
     res.status(200).json({
       status: "ok",
-      service: "git-history-time-traveller-api",
     });
   });
 
@@ -50,9 +65,6 @@ export const createApp = async () => {
   //     },
   //   })
   // );
-
-  const result = await db.select().from(users);
-  console.log(result);
   
 
   return app;

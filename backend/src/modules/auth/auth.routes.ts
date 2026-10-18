@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { env } from "../../config/env.js";
-import { GithubLogout, GithubRefreshToken, githubCallBack, githubOAuth } from "./github-oauth.service.js";
+import { GithubLogout, GithubMe, GithubRefreshToken, githubCallBack, githubOAuth } from "./github-oauth.service.js";
+import { requireAuth } from "./auth.middleware.js";
 
+const authRouter = Router();
 
-const router = Router();
+authRouter.get("/github", githubOAuth);
+authRouter.get("/github/callback", githubCallBack);
+authRouter.post("/refresh", GithubRefreshToken);
+authRouter.post("/logout", GithubLogout);
+authRouter.get("/me", requireAuth, GithubMe);
 
-router.get("/github", githubOAuth);
-router.get("/github/callback", githubCallBack);
-router.post("/refresh", GithubRefreshToken);
-router.post("/logout", GithubLogout);
+export default authRouter;

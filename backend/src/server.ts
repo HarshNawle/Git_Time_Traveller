@@ -9,9 +9,9 @@ const startServer = async () => {
       `Git History Time Traveller API running on http://localhost:${env.PORT}`
     );
 
-    console.log(
-      `GraphQL endpoint: http://localhost:${env.PORT}/graphql`
-    );
+    // console.log(
+    //   `GraphQL endpoint: http://localhost:${env.PORT}/graphql`
+    // );
   });
 };
 

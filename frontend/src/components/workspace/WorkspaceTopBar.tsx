@@ -10,12 +10,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useThemeStore } from "@/stores/theme.store";
+import { useAuthStore } from "@/stores/auth.store";
 
 export function WorkspaceTopBar() {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
+  const githubProfile = useAuthStore((state) => state.user?.avatarUrl);
+  // const userName = useAuthStore((state) => state.user?.githubUsername);
 
   return (
     <header
@@ -234,34 +238,14 @@ export function WorkspaceTopBar() {
             <span className="hidden sm:inline">Export</span>
           </Button>
 
-          <div
-            className="
-            p-2
-            flex 
-            gap-2
-            items-center
-              h-11
-              w-25
-              rounded-xl
-              border-[3px]
-              border-black
-              bg-[#f8f5ea]
-              shadow-[3px_3px_0px_#050402]
-              cursor-pointer
-              dark:border-white
-              dark:bg-[#111111]
-              dark:text-white
-              dark:shadow-[3px_3px_0px_#000]
-              sm:flex
-            "
-          >
-            <Avatar className="size-8">
-              <AvatarFallback className="bg-[#5C4033] rounded-xl text-xs font-bold text-white">
+          
+            <Avatar className="size-13">
+              <AvatarImage src={githubProfile} className=""/>
+              {/* <AvatarFallback className="bg-[#5C4033] rounded-xl text-xs font-bold text-white">
                 H
-              </AvatarFallback>
+              </AvatarFallback> */}
             </Avatar>
-            <span className="text-sm font-semibold">Harsh</span>
-          </div>
+         
         </div>
       </div>
     </header>
