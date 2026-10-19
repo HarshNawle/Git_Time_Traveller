@@ -16,9 +16,13 @@ import type { AuthUser } from "@/types/auth";
 
 interface AccountMenuTriggerProps {
   user: AuthUser;
+  compact?: boolean;
 }
 
-export function AccountMenuTrigger({ user }: AccountMenuTriggerProps) {
+export function AccountMenuTrigger({
+  user,
+  compact = false,
+}: AccountMenuTriggerProps) {
   const navigate = useNavigate();
   const { clearSession } = useAuthStore();
 
@@ -38,15 +42,19 @@ export function AccountMenuTrigger({ user }: AccountMenuTriggerProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-11 w-11 rounded-xl gap-1 p-0"
+          className={
+            compact
+              ? "relative size-10 rounded-full p-0"
+              : "relative h-11 w-11 rounded-xl gap-1 p-0"
+          }
         >
-          <Avatar className="h-10 w-10">
+          <Avatar className={compact ? "size-10" : "h-10 w-10"}>
             <AvatarImage src={user.avatarUrl} alt={user.githubUsername} />
             <AvatarFallback className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               {user.githubUsername.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <ChevronDown className="size-4 text-slate-500" />
+          {compact ? null : <ChevronDown className="size-4 text-slate-500" />}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -59,7 +67,7 @@ export function AccountMenuTrigger({ user }: AccountMenuTriggerProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild onClick={() => navigate("/my-repos")}>
+        <DropdownMenuItem asChild onClick={() => navigate("/dashboard")}>
           <User className="mr-2 h-4 w-4" />
           My Repositories
         </DropdownMenuItem>

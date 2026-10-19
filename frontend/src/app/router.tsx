@@ -2,6 +2,8 @@ import AppShell from "@/components/layout/AppShell";
 import AnalysisPage from "@/pages/AnalysisPage";
 import AuthCallbackPage from "@/pages/AuthCallbackPage";
 import ContributorsPage from "@/pages/ContributorsPage";
+import DashboardPage from "@/pages/DashboardPage";
+import ExplorePage from "@/pages/ExplorePage";
 import HeatmapPage from "@/pages/HeatmapPage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -43,6 +45,11 @@ export const router = createBrowserRouter([
       },
 
       {
+        path: "/dashboard",
+        element: <DashboardPage />,
+      },
+
+      {
         path: "/repo/:jobId/heatmap",
         element: <HeatmapPage />,
       },
@@ -50,6 +57,11 @@ export const router = createBrowserRouter([
       {
         path: "/repo/:jobId/contributors",
         element: <ContributorsPage />,
+      },
+
+      {
+        path: "/explore",
+        element: <ExplorePage />,
       },
 
       {

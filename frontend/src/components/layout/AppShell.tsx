@@ -8,6 +8,14 @@ const AppShell = () => {
   const pathname = location.pathname;
 
   const isAnalysisPage = pathname.startsWith("/analyze/");
+  // Hide global Header on workspace pages (they have their own WorkspaceTopBar)
+  const isWorkspacePage =
+    pathname.startsWith("/workspace/") ||
+    pathname.startsWith("/repo/") ||
+    pathname === "/dashboard" ||
+    pathname === "/explore" ||
+    pathname === "/my-repos" ||
+    pathname === "/settings";
 
   return (
     <div
@@ -21,8 +29,8 @@ const AppShell = () => {
         dark:text-[#f8f5ea]
       "
     >
-      {/* Global Header with GitHub auth */}
-      {!isAnalysisPage && <Header />}
+      {/* Global Header with GitHub auth - hidden on analysis and workspace pages */}
+      {!isAnalysisPage && !isWorkspacePage && <Header />}
 
       {/* Analysis Navbar */}
       {isAnalysisPage && <AnalysisHeader />}

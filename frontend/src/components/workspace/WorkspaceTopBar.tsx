@@ -1,11 +1,8 @@
 import {
   GitBranch,
-  History,
   Moon,
   Search,
-  Share2,
   Sun,
-  Upload,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,7 +16,9 @@ export function WorkspaceTopBar() {
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   const githubProfile = useAuthStore((state) => state.user?.avatarUrl);
-  // const userName = useAuthStore((state) => state.user?.githubUsername);
+  const userName = useAuthStore((state) => state.user?.githubUsername);
+  // const displayName = useAuthStore((state) => state.user?.displayName);
+  // const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
 
   return (
     <header
@@ -168,7 +167,7 @@ export function WorkspaceTopBar() {
             )}
           </Button>
 
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             onClick={toggleTheme}
@@ -187,9 +186,9 @@ export function WorkspaceTopBar() {
             "
           >
             <History className="size-4" />
-          </Button>
+          </Button> */}
 
-          <Button
+          {/* <Button
             variant="outline"
             className="
               h-11
@@ -211,9 +210,9 @@ export function WorkspaceTopBar() {
           >
             <Share2 />
             Share
-          </Button>
+          </Button> */}
 
-          <Button
+          {/* <Button
             variant="outline"
             size="icon"
             onClick={toggleTheme}
@@ -236,15 +235,33 @@ export function WorkspaceTopBar() {
           >
             <Upload />
             <span className="hidden sm:inline">Export</span>
+          </Button> */}
+
+          <Button
+            variant="outline"
+            size="icon"
+            className="
+              size-13
+              rounded-full
+              border-[3px]
+              border-black
+              bg-[#f8f5ea]
+              shadow-[3px_3px_0px_#050402]
+              cursor-pointer
+              dark:border-white
+              dark:bg-[#111111]
+              dark:text-white
+              dark:shadow-[3px_3px_0px_#000]
+            "
+          >
+            <Avatar className="size-13">
+               <AvatarImage src={githubProfile} alt={userName} />
+            </Avatar>
           </Button>
 
           
-            <Avatar className="size-13">
-              <AvatarImage src={githubProfile} className=""/>
-              {/* <AvatarFallback className="bg-[#5C4033] rounded-xl text-xs font-bold text-white">
-                H
-              </AvatarFallback> */}
-            </Avatar>
+              
+            
          
         </div>
       </div>

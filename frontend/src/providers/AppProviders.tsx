@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "./QueryProvider";
+import { AuthInitializer } from "@/components/auth/AuthInitializer";
 
 
 export function AppProviders({
@@ -9,6 +10,7 @@ export function AppProviders({
 }) {
   return (
     <QueryProvider>
+      <AuthInitializer />
       {children}
       <Toaster
         position="bottom-right"
