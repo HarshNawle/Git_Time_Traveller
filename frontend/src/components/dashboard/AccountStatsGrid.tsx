@@ -1,5 +1,5 @@
 import { CalendarDays, Code2, FileText, Users } from "lucide-react";
-import { TrendingUp } from "lucide-react";
+// import { TrendingUp } from "lucide-react";
 import type { DashboardStats } from "@/types/dashboard";
 
 interface AccountStatsGridProps {
@@ -67,15 +67,15 @@ export default function AccountStatsGrid({
                 {loading ? (
                   <div className="mt-2 h-8 w-20 animate-pulse rounded bg-muted" />
                 ) : (
-                  <p className="mt-1 text-3xl font-semibold tracking-tight">
+                  <p className="mt-1 text-2xl font-semibold tracking-tight">
                     {stats[item.key].toLocaleString("en-US")}
                   </p>
                 )}
 
-                <p className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600">
+                {/* <p className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600">
                   <TrendingUp className="size-3" />
                   {stats[item.changeKey]}% from last month
-                </p>
+                </p> */}
               </div>
             </div>
           </div>

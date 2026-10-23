@@ -30,7 +30,7 @@ export default function RepositoryFilters({
         value={sort}
         onValueChange={(value) => onSortChange(value as RepositorySort)}
       >
-        <SelectTrigger className="h-10 w-[160px] rounded-full border border-[#050402]/12 bg-white shadow-none dark:border-[#F8F5EA]/15 dark:bg-[#111111]">
+        <SelectTrigger className="h-10 w-45 rounded-full border border-[#050402]/12 bg-white dark:border-[#F8F5EA]/15 dark:bg-[#111111]">
           <ArrowUpDown className="size-3.5" />
           <SelectValue placeholder="Sort" />
         </SelectTrigger>

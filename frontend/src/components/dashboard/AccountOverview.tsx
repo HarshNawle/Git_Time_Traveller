@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { BookMarked, Calendar, ExternalLink, GitFork, Users } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import type { DashboardProfile } from "@/types/dashboard";
 
 interface AccountOverviewProps {
@@ -13,9 +13,9 @@ export default function AccountOverview({ profile }: AccountOverviewProps) {
       <div className="flex flex-col items-center text-center">
         <Avatar className="size-20">
           <AvatarImage src={profile.avatarUrl} alt={profile.username} />
-          <AvatarFallback className="text-lg">
+          {/* <AvatarFallback className="text-lg">
             {profile.username.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
+          </AvatarFallback> */}
         </Avatar>
 
         <h2 className="mt-4 text-lg font-semibold">{profile.name}</h2>
