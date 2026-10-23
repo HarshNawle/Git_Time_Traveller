@@ -13,20 +13,22 @@ export default function AuthCallbackPage() {
   const loginStatus = searchParams.get("login");
   const error = searchParams.get("error");
 
-  // Guard to prevent duplicate execution (React StrictMode in dev)
+  // Guard to prevent duplicate execution (React StrictMode remounts reset refs)
   const hasRunRef = useRef(false);
+  const CALLBACK_LOCK_KEY = "ghtt-auth-callback";
 
   useEffect(() => {
-    // Skip if already executed
-    if (hasRunRef.current) {
+    if (hasRunRef.current || sessionStorage.getItem(CALLBACK_LOCK_KEY)) {
       return;
     }
     hasRunRef.current = true;
+    sessionStorage.setItem(CALLBACK_LOCK_KEY, "pending");
 
     const handleCallback = async () => {
       // If there's an error from the OAuth flow
       if (error) {
         console.error("OAuth error:", error);
+        sessionStorage.removeItem(CALLBACK_LOCK_KEY);
         setStatus("anonymous");
         navigate("/login?error=github_oauth_failed");
         return;
@@ -51,15 +53,18 @@ export default function AuthCallbackPage() {
 
           // Store session in auth store
           setSession(accessToken, user);
+          sessionStorage.removeItem(CALLBACK_LOCK_KEY);
 
           // Redirect to my-repos page
           navigate("/my-repos", { replace: true });
         } catch (err) {
           console.error("Auth callback failed:", err);
+          sessionStorage.removeItem(CALLBACK_LOCK_KEY);
           setStatus("anonymous");
           navigate("/login?error=session_failed");
         }
       } else {
+        sessionStorage.removeItem(CALLBACK_LOCK_KEY);
         // No login status - might be a direct visit to this page
         navigate("/", { replace: true });
       }

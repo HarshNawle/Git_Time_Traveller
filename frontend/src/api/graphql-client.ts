@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const GRAPHQL_URL =
-  import.meta.env.VITE_API_URL + "/graphql";
+const isDev = import.meta.env.DEV;
+const GRAPHQL_URL = isDev ? "/graphql" : import.meta.env.VITE_API_URL + "/graphql";
 
 export async function graphqlRequest<
   TData,

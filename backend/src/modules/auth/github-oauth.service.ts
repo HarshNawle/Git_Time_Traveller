@@ -64,7 +64,7 @@ export const URLSearchCodeForToken = async (
         client_id: env.GITHUB_CLIENT_ID,
         client_secret: env.GITHUB_CLIENT_SECRET,
         code,
-        redirect_url: env.GITHUB_CALLBACK_URL,
+        redirect_uri: env.GITHUB_CALLBACK_URL,
         code_verifier: codeVerifier,
     });
 

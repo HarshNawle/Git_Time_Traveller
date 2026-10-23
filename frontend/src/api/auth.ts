@@ -1,16 +1,28 @@
 import { apiClient } from "./client";
 import type { AuthUser, RefreshResponse } from "@/types/auth";
 
+let refreshInFlight: Promise<RefreshResponse> | null = null;
+
 export const authApi = {
   /** Call this after OAuth redirect to get access token from refresh token cookie */
   refreshAccessToken: async (): Promise<RefreshResponse> => {
-    const response = await apiClient.post<RefreshResponse>("/api/auth/refresh");
-    return response.data;
+    if (refreshInFlight) {
+      return refreshInFlight;
+    }
+
+    refreshInFlight = apiClient
+      .post<RefreshResponse>("/auth/refresh")
+      .then((response) => response.data)
+      .finally(() => {
+        refreshInFlight = null;
+      });
+
+    return refreshInFlight;
   },
 
   /** Get current user profile (requires valid access token) */
   getMe: async (accessToken: string): Promise<AuthUser> => {
-    const response = await apiClient.get<AuthUser>("/api/auth/me", {
+    const response = await apiClient.get<AuthUser>("/auth/me", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     return response.data;
@@ -18,13 +30,14 @@ export const authApi = {
 
   /** Logout - revokes refresh token on backend */
   logout: async (): Promise<void> => {
-    await apiClient.post("/api/auth/logout");
+    await apiClient.post("/auth/logout");
   },
 
   /** Initiate GitHub OAuth - redirects to GitHub */
   initiateGitHubOAuth: (): string => {
-    // The backend endpoint that starts the OAuth flow
-    const backendUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "";
-    return `${backendUrl}/api/auth/github`;
+    // Start on the backend origin so oauth cookies match GITHUB_CALLBACK_URL.
+    const backendUrl =
+      import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, "") || "";
+    return backendUrl ? `${backendUrl}/api/auth/github` : "/api/auth/github";
   },
 };
