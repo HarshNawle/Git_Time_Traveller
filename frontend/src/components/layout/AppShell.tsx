@@ -12,9 +12,9 @@ const AppShell = () => {
   const isWorkspacePage =
     pathname.startsWith("/workspace/") ||
     pathname.startsWith("/repo/") ||
+    pathname.startsWith("/my-repos/") ||
     pathname === "/dashboard" ||
     pathname === "/explore" ||
-    pathname === "/my-repos" ||
     pathname === "/settings";
 
   return (

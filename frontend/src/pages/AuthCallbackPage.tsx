@@ -55,8 +55,8 @@ export default function AuthCallbackPage() {
           setSession(accessToken, user);
           sessionStorage.removeItem(CALLBACK_LOCK_KEY);
 
-          // Redirect to my-repos page
-          navigate("/my-repos", { replace: true });
+          // Redirect to dashboard page
+          navigate("/dashboard", { replace: true });
         } catch (err) {
           console.error("Auth callback failed:", err);
           sessionStorage.removeItem(CALLBACK_LOCK_KEY);
@@ -86,7 +86,7 @@ export default function AuthCallbackPage() {
               Signing you in...
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Redirecting to your repositories
+              Redirecting to your dashboard
             </p>
             <Loader2 className="mx-auto mt-6 size-8 animate-spin text-green-600" />
           </>

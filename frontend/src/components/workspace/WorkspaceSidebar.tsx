@@ -1,3 +1,5 @@
+import { useRepository } from "@/hooks/queries/use-repository";
+import { useRepoDetail } from "@/hooks/queries/use-repo-detail";
 import {
   BarChart3,
   ExternalLink,
@@ -17,46 +19,54 @@ export function WorkspaceSidebar({
   repositoryId,
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
+  const { data: repository, isPending } = useRepository(repositoryId);
+  const { data: detail, isPending: isDetailPending } = useRepoDetail(repository?.fullName ?? "");
 
   const go = (path: string) => {
-    navigate(`/workspace/${repositoryId}/${path}`);
+    navigate(`/my-repos/${repositoryId}/${path}`);
   };
 
+  const formatNumber = (num: number) => num.toLocaleString();
+  const formatDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", {
+    month: "short", day: "numeric", year: "numeric"
+  });
+
+  if (isPending) {
+    return (
+      <aside className="sticky top-[85px] rounded-2xl hidden h-[calc(100vh-72px)] w-[240px] shrink-0 flex-col border border-[#050402]/10 bg-[#F8F5EA] p-4 lg:flex dark:border-[#F8F5EA]/10 dark:bg-[#080808]">
+        <div className="space-y-3 animate-pulse">
+          <div className="h-5 bg-white/80 dark:bg-white/5 rounded" />
+          <div className="h-4 bg-white/80 dark:bg-white/5 rounded" />
+          <div className="h-4 bg-white/80 dark:bg-white/5 rounded" />
+        </div>
+      </aside>
+    );
+  }
+
+  if (!repository) {
+    return (
+      <aside className="sticky top-[85px] rounded-2xl hidden h-[calc(100vh-72px)] w-[240px] shrink-0 flex-col border border-[#050402]/10 bg-[#F8F5EA] p-4 lg:flex dark:border-[#F8F5EA]/10 dark:bg-[#080808]">
+        <p className="text-red-500 text-sm">Repository not found</p>
+      </aside>
+    );
+  }
+
   return (
-    <aside
-      className="
-        sticky top-[85px]
-        rounded-2xl
-        hidden h-[calc(100vh-72px)] w-[240px] shrink-0
-        flex-col
-        border border-[#050402]/10
-        bg-[#F8F5EA]
-        p-4
-        lg:flex
-        dark:border-[#F8F5EA]/10
-        dark:bg-[#080808]
-      "
-    >
+    <aside className="sticky top-[85px] rounded-2xl hidden h-[calc(100vh-72px)] w-[240px] shrink-0 flex-col border border-[#050402]/10 bg-[#F8F5EA] p-4 lg:flex dark:border-[#F8F5EA]/10 dark:bg-[#080808]">
       <div className="px-1">
         <p className="text-[11px] font-mono font-bold uppercase tracking-wide opacity-45">
           Repository
         </p>
 
         <div className="mt-3 flex items-center gap-3">
-          <div
-            className="
-              flex size-10 items-center justify-center
-              rounded-full bg-[#050402] text-white
-              dark:bg-white dark:text-black
-            "
-          >
+          <div className="flex size-10 items-center justify-center rounded-full bg-[#050402] text-white dark:bg-white dark:text-black">
             <GitBranch className="size-5" />
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-mono font-bold">vercel/next.js</p>
+            <p className="truncate text-sm font-mono font-bold">{ repository.fullName }</p>
             <p className="truncate text-xs font-mono opacity-55">
-              A React framework for the web
+              { repository.description }
             </p>
           </div>
 
@@ -97,25 +107,43 @@ export function WorkspaceSidebar({
         </p>
 
         <div className="mt-4 space-y-3.5 text-sm font-mono font-bold">
-          <InfoRow label="Commits" value="12,463" />
-          <InfoRow label="Contributors" value="428" />
-          <InfoRow label="Branches" value="42" />
-          <InfoRow label="Created" value="Oct 25, 2016" />
-          <InfoRow label="Language" value="TypeScript" />
+          <InfoRow label="Commits" value={ formatNumber(repository.commits) } />
+          <InfoRow label="Stars" value={ formatNumber(repository.stars) } />
+          <InfoRow label="Forks" value={ formatNumber(repository.forks) } />
+          <InfoRow label="Language" value={ repository.language || "—" } />
+          <InfoRow label="Updated" value={ formatDate(repository.updatedAt) } />
+          <InfoRow label="Visibility" value={ repository.isPrivate ? "Private" : "Public" } />
+
+          {isDetailPending ? (
+            <>
+              <InfoRow label="Contributors" value={<span className="animate-pulse">...</span>} />
+              <InfoRow label="Branches" value={<span className="animate-pulse">...</span>} />
+            </>
+          ) : detail ? (
+            <>
+              <InfoRow label="Contributors" value={ formatNumber(detail.contributorsCount) } />
+              <InfoRow label="Branches" value={ formatNumber(detail.branchesCount) } />
+              {detail.languages && Object.keys(detail.languages).length > 0 && (
+                <InfoRow
+                  label="Languages"
+                  value={
+                    Object.entries(detail.languages)
+                      .sort((a, b) => b[1] - a[1])
+                      .slice(0, 3)
+                      .map(([lang]) => lang)
+                      .join(", ")
+                  }
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <InfoRow label="Contributors" value="—" />
+              <InfoRow label="Branches" value="—" />
+            </>
+          )}
         </div>
       </div>
-
-      {/* <button
-        onClick={() => navigate("/")}
-        className="
-          mt-auto flex items-center gap-2
-          px-1 py-2 text-sm font-medium 
-          opacity-60 transition hover:opacity-100
-        "
-      >
-        <ArrowLeft className="size-4" />
-        <p className="font-mono">Back to Home</p>
-      </button> */}
     </aside>
   );
 }
@@ -157,7 +185,7 @@ function InfoRow({
   value,
 }: {
   label: string;
-  value: string;
+  value: string | React.ReactNode;
 }) {
   return (
     <div className="flex justify-between gap-3">

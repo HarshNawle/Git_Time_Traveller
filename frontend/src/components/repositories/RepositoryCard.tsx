@@ -52,7 +52,7 @@ export default function RepositoryCard({
       <div className="mt-auto flex items-center justify-between pt-5">
         <ActivitySparkline values={repository.activity} color={sparklineColor} />
         <Link
-          to={`/workspace/${repository.id}/timeline`}
+          to={`/my-repos/${repository.id}`}
           className="inline-flex items-center gap-1 text-sm font-medium"
         >
           View Analysis

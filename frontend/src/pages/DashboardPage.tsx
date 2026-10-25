@@ -14,8 +14,11 @@ import { useDashboardStats } from "@/hooks/queries/use-dashboard-stats";
 import { useMe } from "@/hooks/queries/use-me";
 import { useAuthStore } from "@/stores/auth.store";
 import { WorkspaceTopBar } from "@/components/workspace/WorkspaceTopBar";
+// import { useNavigate } from "react-router-dom";
 
 export default function DashboardPage() {
+  // const navigate = useNavigate();
+
   const authUser = useAuthStore((state) => state.user);
   const { data: user, isPending: isUserPending, isError: isUserError } = useMe();
   const username = user?.githubUsername ?? authUser?.githubUsername;

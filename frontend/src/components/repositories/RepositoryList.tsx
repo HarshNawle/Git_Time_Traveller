@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, GitCommitHorizontal, GitFork, MoreHorizontal, Star } from "lucide-react";
+import { ArrowRight, Calendar, GitCommitHorizontal, GitFork, Star } from "lucide-react";
 
 import type { DashboardRepository } from "@/types/dashboard";
 import {
@@ -86,20 +86,21 @@ export default function RepositoryList({ repositories }: RepositoryListProps) {
             />
 
             <Link
-              to={`/workspace/${repository.id}/timeline`}
+              to={`/my-repos/${repository.id}`}
               className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium"
             >
               View Analysis
               <ArrowRight className="size-3.5" />
             </Link>
 
-            <button
+            {/* <button
               type="button"
               className="rounded-lg p-1 text-[#050402]/40 hover:bg-black/5 dark:text-[#F8F5EA]/40"
               aria-label={`More actions for ${repository.name}`}
             >
               <MoreHorizontal className="size-4" />
-            </button>
+            </button> */}
+
           </div>
         </article>
       ))}

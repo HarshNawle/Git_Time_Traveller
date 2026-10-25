@@ -86,9 +86,9 @@ export function RecentCommits() {
           <h3 className="font-black">Recent Commits</h3>
         </div>
 
-        <button className="text-sm font-semibold text-emerald-600">
+        {/* <button className="text-sm font-semibold text-emerald-600">
           View all commits →
-        </button>
+        </button> */}
       </div>
 
       <div className="overflow-x-auto">

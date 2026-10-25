@@ -44,6 +44,7 @@ export interface DashboardRepository {
   updatedAt: string;
   avatarUrl: string;
   activity: number[];
+  defaultBranch: string;
 }
 
 export interface DashboardStats {

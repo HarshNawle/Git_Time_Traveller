@@ -68,6 +68,22 @@ export const router = createBrowserRouter([
         path: "/my-repos",
         element: <MyReposPage />,
       },
+      {
+        path: "/my-repos/:repositoryId",
+        element: <MyReposPage />,
+      },
+      {
+        path: "/my-repos/:repositoryId/timeline",
+        element: <TimelinePage />,
+      },
+      {
+        path: "/my-repos/:repositoryId/heatmap",
+        element: <HeatmapPage />,
+      },
+      {
+        path: "/my-repos/:repositoryId/contributors",
+        element: <ContributorsPage />,
+      },
 
       {
         path: "/settings",

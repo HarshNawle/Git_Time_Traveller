@@ -51,6 +51,7 @@ function mapRepository(repo: GithubRepository): DashboardRepository {
     updatedAt: repo.updated_at,
     avatarUrl: repo.owner.avatar_url,
     activity: buildActivity(repo.full_name),
+    defaultBranch: repo.default_branch,
   };
 }
 
@@ -60,6 +61,19 @@ function formatMemberSince(iso: string) {
     day: "numeric",
     year: "numeric",
   });
+}
+
+async function getTotalCountFromPaginated(url: string): Promise<number> {
+  const response = await fetch(`${url}&per_page=1`, {
+    headers: { Accept: "application/vnd.github+json" },
+  });
+  const link = response.headers.get("Link");
+  if (link && link.includes('rel="last"')) {
+    const match = link.match(/page=(\d+)>; rel="last"/);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+  const data = await response.json();
+  return Array.isArray(data) ? data.length : 0;
 }
 
 export const dashboardApi = {
@@ -103,5 +117,137 @@ export const dashboardApi = {
       },
       repositories,
     };
+  },
+};
+
+export const repoDetailApi = {
+  async getContributorsCount(owner: string, repo: string): Promise<number> {
+    return getTotalCountFromPaginated(`${GITHUB_API_URL}/repos/${owner}/${repo}/contributors?anon=1`);
+  },
+
+  async getBranchesCount(owner: string, repo: string): Promise<number> {
+    return getTotalCountFromPaginated(`${GITHUB_API_URL}/repos/${owner}/${repo}/branches`);
+  },
+
+  async getLanguages(owner: string, repo: string): Promise<Record<string, number>> {
+    return githubJson<Record<string, number>>(`${GITHUB_API_URL}/repos/${owner}/${repo}/languages`);
+  },
+
+  async getFullDetail(owner: string, repo: string): Promise<{
+    contributorsCount: number;
+    branchesCount: number;
+    languages: Record<string, number>;
+  }> {
+    const [contributorsCount, branchesCount, languages] = await Promise.all([
+      this.getContributorsCount(owner, repo),
+      this.getBranchesCount(owner, repo),
+      this.getLanguages(owner, repo),
+    ]);
+    return { contributorsCount, branchesCount, languages };
+  },
+};
+
+export const commitApi = {
+  async getLatestCommit(owner: string, repo: string): Promise<{
+    sha: string;
+    date: string;
+    message: string;
+    author: {
+      name: string;
+      login: string;
+      avatarUrl: string;
+    };
+    files: Array<{
+      filename: string;
+      additions: number;
+      deletions: number;
+    }>;
+  } | null> {
+    try {
+      // Get latest commit
+      const commits = await githubJson<Array<{
+        sha: string;
+        commit: {
+          author: {
+            date: string;
+            name: string;
+          };
+          message: string;
+        };
+        author: {
+          login: string;
+          avatar_url: string;
+        } | null;
+      }>>(`${GITHUB_API_URL}/repos/${owner}/${repo}/commits?per_page=1`);
+
+      if (!commits.length) return null;
+
+      const commit = commits[0];
+      
+      // Get commit details with files
+      const commitDetail = await githubJson<{
+        sha: string;
+        commit: {
+          author: {
+            date: string;
+            name: string;
+          };
+          message: string;
+        };
+        author: {
+          login: string;
+          avatar_url: string;
+        } | null;
+        files: Array<{
+          filename: string;
+          additions: number;
+          deletions: number;
+        }>;
+      }>(`${GITHUB_API_URL}/repos/${owner}/${repo}/commits/${commit.sha}`);
+
+      return {
+        sha: commitDetail.sha.slice(0, 7),
+        date: commitDetail.commit.author.date,
+        message: commitDetail.commit.message.split("\n")[0],
+        author: {
+          name: commitDetail.commit.author.name,
+          login: commitDetail.author?.login || "unknown",
+          avatarUrl: commitDetail.author?.avatar_url || "",
+        },
+        files: commitDetail.files?.slice(0, 10).map(f => ({
+          filename: f.filename,
+          additions: f.additions,
+          deletions: f.deletions,
+        })) || [],
+      };
+    } catch {
+      return null;
+    }
+  },
+
+  async getContributorsStats(owner: string, repo: string): Promise<{
+    totalCommits: number;
+    totalAuthors: number;
+    totalAdditions: number;
+    totalDeletions: number;
+  }> {
+    try {
+      const contributors = await githubJson<Array<{
+        author: { login: string };
+        total: number;
+        weeks: Array<{ a: number; d: number }>;
+      }>>(`${GITHUB_API_URL}/repos/${owner}/${repo}/stats/contributors`);
+
+      const totalCommits = contributors.reduce((sum, c) => sum + c.total, 0);
+      const totalAuthors = contributors.length;
+      const totalAdditions = contributors.reduce((sum, c) => 
+        sum + c.weeks.reduce((w, wk) => w + wk.a, 0), 0);
+      const totalDeletions = contributors.reduce((sum, c) => 
+        sum + c.weeks.reduce((w, wk) => w + wk.d, 0), 0);
+
+      return { totalCommits, totalAuthors, totalAdditions, totalDeletions };
+    } catch {
+      return { totalCommits: 0, totalAuthors: 0, totalAdditions: 0, totalDeletions: 0 };
+    }
   },
 };
